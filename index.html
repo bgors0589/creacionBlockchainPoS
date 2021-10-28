@@ -36,7 +36,7 @@
 			openssl ec -in alertkey.pem -text > alertkey.hex<br />
 			openssl ecparam -genkey -name secp256k1 -out testnetalert.pem<br />
 			openssl ec -in testnetalert.pem -text > testnetalert.hex</code>
-		<p><strong>Abra los Siguientes Archivos<strong></p>
+		<p><strong>Abra los Siguientes Archivos</strong></p>
 			<ul>
 			<li><p>/src/alert.cpp:22 - Par de Claves generado con openssl. Colocar Public Key aqui, save the Private Key for your automated checkpoint server.</p></li>
 
@@ -44,7 +44,7 @@
 			/src/qt/bitcoinunits/cpp:37-39 Aquí es donde está el símbolo que se mostrará ---)No se sesario si NP++
 			</p></li>
 			</ul>
-		<p><strong>Vuelva y abra los Siguientes Archivos<strong></p>
+		<p><strong>Vuelva y abra los Siguientes Archivos</strong></p>
 		<ul>
 			<li><p>/src/main.cpp:39 Cambiar la dificultad (>20  >24)</p></li>
 			<li><p>/src/net.cpp:1204 - Ingrese la información de DNS para permitir que las billeteras se conecten a sus pares sin necesidad de agregar nodos </p></li>
