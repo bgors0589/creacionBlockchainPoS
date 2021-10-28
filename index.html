@@ -10,40 +10,132 @@
 </head>
 
 <body>
-
-	<header>
-		<nav>
-			<ul>
-				<li>Inicio</li>
-			</ul>
-		</nav>
-	</header>
-	
-	<section>
-	
-		<article>
-			<header>
-				<h2>Article title</h2>
-				<p>Posted on <time datetime="2009-09-04T16:31:24+02:00">September 4th 2009</time> by <a href="#">Writer</a> - <a href="#comments">6 comments</a></p>
-			</header>
-			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-		</article>
-		
-		<article>
-			<header>
-				<h2>Article title</h2>
-				<p>Posted on <time datetime="2009-09-04T16:31:24+02:00">September 4th 2009</time> by <a href="#">Writer</a> - <a href="#comments">6 comments</a></p>
-			</header>
-			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-		</article>
-		
-	</section>
-
-	<aside>
-		<h2>About section</h2>
-		<p>Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-	</aside>
-
+	<h1 class="entry-title">How to create cryptocurrency (POW/POS Peercoin based)</h1></div><span class="PostFull__time_author_category_large vcard"><div class="Userpic" style="background-image:url(https://images.hive.blog/u/bluudz/avatar)"></div><div class="right-side"><span class="Author"><span itemProp="author" itemscope="" itemType="http://schema.org/Person"><strong><a href="/@bluudz">bluudz<!-- --> <span class="Reputation" title="Reputación">(<!-- -->48<!-- -->)</span><span class="Icon dropdown-arrow" style="display:inline-block;width:1.12rem;height:1.12rem"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g><polygon points="128,90 256,218 384,90"></polygon></g></svg></span></a></strong><span></span></span></span>en<!-- --> <a href="/trending/cryptocurrency">#cryptocurrency</a> • <span title="11/8/2018 11:06 PM"><span>hace 3 años</span></span> <span title="11/10/2018 3:56 AM">(edited)</span></div></span></div><div class="PostFull__body entry-content"><div class="MarkdownViewer Markdown"><div><p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/euah2gbjng.png" alt="euah2gbjng.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/euah2gbjng.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/euah2gbjng.png 2x" /></p>
+<p>I have been trying for some days to clone the current Peercoin client to create new altcoin. Mostly to learn about the blockchain and to have a bit of fun. Now I'm in the stage when it seem to be running so decided to share the steps with steemians as there is not much resources on the subject. Also I'm quite sure I will soon forget many of the steps so want to keep it for my records.</p>
+<p><strong>I'm not a developer or coder</strong> so if you find that some of the part could be done better please let me know in comments. Also please note that my goal was to clone the coin, modify just as little as needed and get the blockchain up and running. Tweeking the coin to fully working alt was not yet my purpose. I will welcome any help to make this guide clear and correct for others.</p>
+<p>I will be using Linux Ubuntu 16.04 for this exercise.</p>
+<h1>Lets get started.</h1>
+<p>Download the newest source https://github.com/peercoin/peercoin/archive/master.zip</p>
+<p>Unpack and install dependencies for the <strong>daemon</strong> to be able to compile.<br />
+(<a href="https://github.com/peercoin/peercoin/blob/master/doc/build-unix.md" rel="nofollow noopener" title="This link will take you away from hive.blog">https://github.com/peercoin/peercoin/blob/master/doc/build-unix.md</a>)</p>
+<p><em>sudo apt-get install build-essential libssl-dev libdb4.8-dev libdb4.8++-dev sudo libboost-all-dev libminiupnpc-dev</em></p>
+<p>Rename the peercoin-master folder to your new coin name. Deadcoin it will be in my case.</p>
+<p>Using <strong>Notepad++</strong> (or any other text editor able to search &amp; replace multiple folders at once) search and replace <strong>Peercoin</strong>, <strong>PPC</strong>, <strong>peercoin</strong> and <strong>ppcoin</strong> with your desired coin. I'm not sure why there is peercoin and ppcoin, but if you rename both to the same file, later you will get error when compiling so just name it slightly differently. Please note that Notepad++ in Linux has to be run via wine.</p>
+<ul>
+<li><p>/src/net.cpp:1204 - Enter DNS information to allow wallets to connect to peers without needing addnodes</p></li>
+<li><p>/src/base58.h:276 - Change the pubkey to the corresponding number for the letter you want addresses to start with (<a href="https://en.bitcoin.it/wiki/List_of_address_prefixes" rel="nofollow noopener" title="This link will take you away from hive.blog">https://en.bitcoin.it/wiki/List_of_address_prefixes</a>)</p></li>
+<li><p>/src/checkpoints.cpp:42 - Delete all the checkpoints except Genesis block.</p></li>
+<li><p>/src/protocol.h:18/19 - These are the ports your new coin will use.</p></li>
+<li><p>/src/protocol.cpp:22 - Change the pchMessage values to be unique to your coin (otherwise you will try piggybacking other chains and it will cause problems).</p></li>
+<li><p>/src/version.cpp:14 - Change to whatever you want your buildname to be.</p></li>
+<li><p>/src/version.h:35: - This will be the version number for your new coin.</p></li>
+<li><p>/src/main.h:35-70 - These are overall coin specs and most are written in readable english. If you don't know what one means, don't change it. Values are in satoshi format. (I have not been playing with those much yet).</p></li>
+<li><p>/src/main.cpp:1159 - Year staking rewards setup (I have not been changing mining reward, if anyone could share how to do it properly I'd be happy to include in guide)</p></li>
+<li><p>/src/qt/res/icons - This is the folder that contains all the icons for your QT wallet</p></li>
+<li><p>/src/qt/res/images - This is the splash (loading) screen for your new coin and QT wallet.</p></li>
+</ul>
+<p><strong>SETTING UP DNS SEEDS</strong><br />
+Go the the DNS settings of the domain you wish to use and add a DNS Record as follows: <em>dnsseed.domain.com, A Record, 14400 TTL</em><br />
+You can add multiple seeds by repeating these steps and simply changing the IP it is pointed to. Point it to the IP of your dedicated node (or checkpoint server's IP).<br />
+The DNSseed is not required in order to run the network. It only help each node to automatically connect to the dnsseed server and receive blockchain information. You don't need it at the moment.</p>
+<p><strong>REMOVING GENESIS BLOCK AND GENERATING NEW ONE</strong></p>
+<ul>
+<li>Main.cpp:32710 - Change the value for the constant, pszTimestamp, to something unique, up to 91 characters.</li>
+<li>Main.cpp:2261 - Change txNew.nTime, block.nTime value to current epoch time (<a href="https://www.unixtimestamp.com/" rel="nofollow noopener" title="This link will take you away from hive.blog">https://www.unixtimestamp.com/</a>). Do the same for testnet bellow.</li>
+<li>Main.cpp:2262 - Make sure that block.nNonce=0, do the same for testnet.</li>
+<li>Main.cpp:3293, 3303 - delete <a href="/trending/ifdef"> #ifdef</a> TESTING and <a href="/trending/endif"> #endif</a> to uncommend the code.</li>
+<li>Main.cpp:3221, 3228, 3235 - delete <a href="/trending/ifdef"> #ifdef</a> TESTING and <a href="/trending/endif"> #endif</a> to uncommend the code.</li>
+<li>Main.cpp:3222 - delete the genesis hash and leave empty <code>hashGenesisBlock = uint256("");</code></li>
+<li>Main.h:82,83 - Delete the Genesis blocks hashes <code>hashGenesisBlockOfficial("");</code> <code>hashGenesisBlockTestNet("");</code></li>
+</ul>
+<p>Do the backup of your coin folder. I usually just compress it. Its good to have backups not to have to follow all the steps again when something goes wrong :)</p>
+<p><strong>COMPILE AND RUN THE DAEMON</strong></p>
+<p>Navigate to the /src/ and run <code>make -f makefile.unix</code><br />
+It may take some time to compile. Just have a cup of coffee.</p>
+<p>We will continue to use test net from here as getting testnet running is easier due to lower difficulty for finding Genesis block. I have not managed to find the Genesis block on mainnet without having to lower the difficulty, you may try it yourself later.</p>
+<p>You should have your daemon in the /src/ just run: <em>./YOURCOIND --daemon -testnet</em><br />
+In the /home/.yourcoin/testnet/ run: <em>tail -f debug.log</em> you will see your computer trying to find the genesis block. It may take a bit of time before the result pops up together with  assertion error in the main window.</p>
+<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/31td2drhr3.png" alt="31td2drhr3.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/31td2drhr3.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/31td2drhr3.png 2x" /></p>
+<p>Here I took a bit of leap of faith and suspected that the bock was found, but the information was not printed in the decoded format. Usually the merkle root is at the end of the block information so I just took the last part and put it into Main.cpp:3310 - <code>hashMerkleRoot == uint256("<strong>0x</strong>bbe8d7dc26b86158c2cd5bff003550d5a05e3b67024f42bb5faadad711b342f9"));</code>(Don't forget 0x)</p>
+<p>(If anyone can explain me exactly what has happened here please do so I can make sure the guide is correct.)</p>
+<p>Save and recompile the core using /src/ <em>make -f makefile.unix</em><br />
+Delete the /home/.yourcoin/ folder</p>
+<p>After it finish compiling repead the steps we did on our first run:<br />
+You should have your daemon in the /src/ just run: <em>./yourcoind --daemon -testnet</em><br />
+In the /home/.yourcoin/testnet run: <em>tail -f debug.log</em> you will see your computer trying to find the genesis block. It may take a bit of time before the result pops up together with error in the assertion error in the main window. This time the debug log will show full information about the block found.</p>
+<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/zkbut8lcsz.png" alt="zkbut8lcsz.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/zkbut8lcsz.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/zkbut8lcsz.png 2x" /></p>
+<ul>
+<li>Update Main.h:83 with block hash preceding by 0x - <code>hashGenesisBlockTestNet("0x0000000a47f55eb388fe0d465c87e69911feb2946d2f36559ed122923e3d91dc");</code> (don't forget we are on testnet still)</li>
+<li>Update Main.cpp:3290 with nonce - <code>block.nNonce   = 222074003;</code></li>
+<li>Kernel.cpp:14:25 - change the nProtocolSwitchTime need to be set to a time in the future, after PoS starts. So just set these to several days in advance. Use the Epoch Converter to get the correct value. I have not been sure how this work so just set it in year time into future using <a href="https://www.unixtimestamp.com/" rel="nofollow noopener" title="This link will take you away from hive.blog">https://www.unixtimestamp.com/</a></li>
+</ul>
+<p>Save the changes and recompile the daemon again.</p>
+<h1>GETTING THE NETWORK TO RUN</h1>
+<p><em>./yourcoind --daemon -testnet</em><br />
+If you got the same error a me we are all good and almost running!<br />
+<img src="https://images.hive.blog/768x0/https://img.esteem.ws/i2qowudryz.png" alt="i2qowudryz.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/i2qowudryz.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/i2qowudryz.png 2x" /></p>
+<p>The blockchain requires two nodes in order to start working, generating block and be alive in general. We are going to create two copies of our daemon to run and connect to each other.</p>
+<ul>
+<li>Copy <strong>yourcoind</strong> to the /home/.yourcoin</li>
+<li>Create second copy of .yourcoin directory and rename it to ./yourcoin2<br />
+*Rename the daemon in the second copy to yourcoind2</li>
+<li>In each directory create empty file yourcoin.conf</li>
+</ul>
+<p>yourcoin1.conf should be:<br />
+<code>rpcuser=anything<br />
+rpcpassword=anything<br />
+rpcallowip=127.0.0.1<br />
+server=1<br />
+daemon=1<br />
+listen=1<br />
+dnsseed=0<br />
+port=your main net port<br />
+rpcport=your main net rpc port<br />
+gen=1<br />
+testnet=1</code></p>
+<p>yourcoin2.conf<br />
+<code>rpcuser=anything<br />
+rpcpassword=anything<br />
+rpcallowip=127.0.0.1<br />
+server=1<br />
+daemon=1<br />
+port=your testnet port<br />
+rpcport=your testnet rpc port<br />
+gen=1<br />
+testnet=1</code></p>
+<p>Save both and exit.</p>
+<p>We must specify the data directory so that the 2nd instance doesn't try to use '~/.yourcoin' and we must also specify that we want to connect to the IP address of our first instance, which, in this case, is localhost. We will be starting the second daemon like this <em>./YOURCOIND2 -datadir=/home/USER/.YOURCOIN2 -connect=127.0.0.1:YOURMAINNETPORT</em></p>
+<p>Go ahead and start both daemons<br />
+Daemon1 - ./YOURCOIND (from the folder where it is placed)<br />
+Daemon2 - <em>./YOURCOIND2 -datadir=/home/USER/.YOURCOIN2 -connect=127.0.0.1:YOURMAINNETPORT</em> (from the folder where 2nd is placed)</p>
+<p>USEFUL COMMANDS AT THIS STAGE<br />
+ps aux | grep yourcoind - to find running process of daemon<br />
+kill -9 ID of the process 38317 for example will stop the daemon.</p>
+<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/ttxzemf249.png" alt="ttxzemf249.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/ttxzemf249.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/ttxzemf249.png 2x" /></p>
+<p>After you added rpcallow=127.0.0.1 i the .conf files you should be albe stop the daemons by<br />
+./YOURCOIND stop, but if you run it before, you have to kill as showed above.</p>
+<p>You can go to the testnet folder and run <em>tails -f debug.log</em> to see what is happening<br />
+Also watch -n 20 ./YOURCOIND getinfo is good to see whether you are receiving first blocks.</p>
+<p>If everything is correct you should be able to soon start finding blocks.<br />
+Congratulation. Your coins is ALIVE!</p>
+<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/x2cbzyae8d.png" alt="x2cbzyae8d.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/x2cbzyae8d.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/x2cbzyae8d.png 2x" /></p>
+<p>So this is the minimal setup and your blockchain is going. There is few more things to consider.</p>
+<p><strong>DNSSEED</strong> - if you start the wallet on the server you provided as dnsseed, any node will automatically connect to it. Running the seed on VPS will make anyone who will run the wallet to be connected to network immediately.</p>
+<p><strong>QT wallet</strong> - you can compile the QT wallet as per original Peercoin instruction found <a href="https://github.com/peercoin/peercoin/blob/master/doc/readme-qt.rst" rel="nofollow noopener" title="This link will take you away from hive.blog">https://github.com/peercoin/peercoin/blob/master/doc/readme-qt.rst</a> as long as you have in your .conf file testnet=1 your QT will automatically starts in testnet also.</p>
+<p>Before you compile the QT, make sure to create your own design and logos at:<br />
+/src/qt/res/icons - This is the folder that contains all the icons for your wallet<br />
+/src/qt/res/images - This is the splash (loading) screen for your new coin</p>
+<p><strong>MAINNET</strong> - I have not yet try how long it would take to find the genesis on the mainnet, I found workaround by reducing the difficulty here: Main.cpp:L39 and Main.cpp:L40. After I found the block instantly the same way we used on testnet, but the difficutly was to low and I was mining too fast. If you find some reasonable compromise please let me know.</p>
+<p>I have used some information from the following guides :<br />
+<a href="https://altcoinsfoundation.com/forum/developers/56-how-to-create-your-own-cryptocurrency-altcoin-1-dev" rel="nofollow noopener" title="This link will take you away from hive.blog">https://altcoinsfoundation.com/forum/developers/56-how-to-create-your-own-cryptocurrency-altcoin-1-dev</a><br />
+<a href="https://github.com/Peershares/Peershares/wiki/Genesis-Block-%28Starting-a-New-Blockchain-Instance%29" rel="nofollow noopener" title="This link will take you away from hive.blog">https://github.com/Peershares/Peershares/wiki/Genesis-Block-%28Starting-a-New-Blockchain-Instance%29</a></p>
+<p>So I hope this guide will help some of you learn more about blockchain,  I will post corrections and updates to this guide as I receive them. Sorry if some of the information are not correct. As I said before I'm just learning and those are first steps.</p>
+<p>All the best and follow <a href="/@bluudz">@bluudz</a> for future tutorials.<br />
+Thanks to the <a href="/trending/peercoin"> #Peercoin</a> develepers for their hard work, <a href="/@atmandigital">@atmandigital</a> for helping me with some of the problems I encountered and to the guys who wrote revious articles on the topic.</p>
+<p>This is how my wallet looks like at the end of the day.<br />
+<img src="https://images.hive.blog/768x0/https://img.esteem.ws/c5e2alw0ed.png" alt="c5e2alw0ed.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/c5e2alw0ed.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/c5e2alw0ed.png 2x" /></p>
+<p>All the best!</p>
+</div></div></div></span>
 	<footer>
 		<p>Copyright 2009 Your name</p>
 	</footer>
