@@ -100,7 +100,7 @@ No dude en hacer preguntas si no comprende un paso, lo apoyaré si es necesario
   
   
   
-ORIGINAL
+# ---> este es el  ORIGINAL
   
   
   Guide to compile Bitcoin | Dash | other altcoins and generate Ubuntu & Debian or Windows executables
