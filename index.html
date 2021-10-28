@@ -21,30 +21,48 @@
 		no era mi propósito. Agradeceré cualquier ayuda para que esta guía sea clara y correcta para los demás.</p>
 		<p> Usaré Linux Ubuntu 16.04 para este ejercicio. </p> 
 	<h1>Comencemos.</h1>
-		<p>Descargue de este link las carpetas a copiar wget https://github.com/peercoin/peercoin/archive/refs/tags/v0.6.4ppc.zip es el release 0.6.4</p>
-		<p>Descomprima e instale las dependencia del<strong>daemon</strong> para que pueda compilar.<br />
+		<p>Descargue de este link las carpetas a copiar wget <a href="https://github.com/peercoin/peercoin/archive/refs/tags/v0.6.4ppc.zip" 
+		target="_blank">https://github.com/peercoin/peercoin/archive/refs/tags/v0.6.4ppc.zip</a> es el release 0.6.4</p>
+		<p>Descomprima e instale las dependencia del <strong>daemon</strong> para que pueda compilar.<br />
 		(<a href="https://github.com/peercoin/peercoin/blob/master/doc/build-unix.md" target="_blank">https://github.com/peercoin/peercoin/blob/master/doc/build-unix.md</a>)</p>
 		<p><em>sudo apt-get install build-essential libssl-dev libdb4.8-dev libdb4.8++-dev sudo libboost-all-dev libminiupnpc-dev</em></p>
-		<p>Rename the peercoin-master folder to your new coin name. Deadcoin it will be in my case.</p>
-		<p>Using <strong>Notepad++</strong> (or any other text editor able to search &amp; replace multiple folders at once) search and replace <strong>Peercoin</strong>, <strong>PPC</strong>, <strong>peercoin</strong> and <strong>ppcoin</strong> with your desired coin. I'm not sure why there is peercoin and ppcoin, but if you rename both to the same file, later you will get error when compiling so just name it slightly differently. Please note that Notepad++ in Linux has to be run via wine.</p>
+		<p>Cambie el nombre de la carpeta peercoin por el nombre de su nueva Altcoin. En mi caso se llamara Deadcoin.</p>
+		<p>Puese usar<strong>Notepad++</strong> (o cualquier otro editor de texto &amp; para reemplazar en todo la carpeta el contenido) busque y reemplace 
+		<strong>Peercoin</strong>, <strong>PPC</strong>, <strong>peercoin</strong> y <strong>ppcoin</strong> por su moneda. </p>
+		<p>Tambien puede hacerlo de la siguiente forma situandose en la carpeta y con un terminal</p>
+		<code>find . -type f -print0 | xargs -0 sed -i 's/peercoin/<SUMONEDA>/g'</code><br />
+		<p>cree las claves publica y privada de su proyecto<p>
+			<code>openssl ecparam -genkey -name secp256k1 -out alertkey.pem<br />
+			openssl ec -in alertkey.pem -text > alertkey.hex<br />
+			openssl ecparam -genkey -name secp256k1 -out testnetalert.pem<br />
+			openssl ec -in testnetalert.pem -text > testnetalert.hex</code>
+		<p><strong>Abra los Siguientes Archivos<strong></p>
+			<ul>
+			<li><p>/src/alert.cpp:22 - Par de Claves generado con openssl. Colocar Public Key aqui, save the Private Key for your automated checkpoint server.</p></li>
+
+			<li><p>(---/src/qt/bitcoingui.cpp:76 Cambie el titulo de la ventana de su wallet como quiera que se muestre
+			/src/qt/bitcoinunits/cpp:37-39 Aquí es donde está el símbolo que se mostrará ---)No se sesario si NP++
+			</p></li>
+			</ul>
+		<p><strong>Vuelva y abra los Siguientes Archivos<strong></p>
 		<ul>
-			<li><p>/src/net.cpp:1204 - Enter DNS information to allow wallets to connect to peers without needing addnodes</p></li>
-			<li><p>/src/base58.h:276 - Change the pubkey to the corresponding number for the letter you want addresses to start with (<a href="https://en.bitcoin.it/wiki/List_of_address_prefixes" rel="nofollow noopener" title="This link will take you away from hive.blog">https://en.bitcoin.it/wiki/List_of_address_prefixes</a>)</p></li>
-			<li><p>/src/checkpoints.cpp:42 - Delete all the checkpoints except Genesis block.</p></li>
-			<li><p>/src/protocol.h:18/19 - These are the ports your new coin will use.</p></li>
-			<li><p>/src/protocol.cpp:22 - Change the pchMessage values to be unique to your coin (otherwise you will try piggybacking other chains and it will cause problems).</p></li>
-			<li><p>/src/version.cpp:14 - Change to whatever you want your buildname to be.</p></li>
-			<li><p>/src/version.h:35: - This will be the version number for your new coin.</p></li>
-			<li><p>/src/main.h:35-70 - These are overall coin specs and most are written in readable english. If you don't know what one means, don't change it. Values are in satoshi format. (I have not been playing with those much yet).</p></li>
-			<li><p>/src/main.cpp:1159 - Year staking rewards setup (I have not been changing mining reward, if anyone could share how to do it properly I'd be happy to include in guide)</p></li>
-			<li><p>/src/qt/res/icons - This is the folder that contains all the icons for your QT wallet</p></li>
-			<li><p>/src/qt/res/images - This is the splash (loading) screen for your new coin and QT wallet.</p></li>
+			<li><p>/src/main.cpp:39 Cambiar la dificultad (>20  >24)</p></li>
+			<li><p>/src/net.cpp:1204 - Ingrese la información de DNS para permitir que las billeteras se conecten a sus pares sin necesidad de agregar nodos </p></li>
+			<li><p>/src/base58.h:276 - Cambie la clave pública al número correspondiente a la letra con la que desea que comiencen las direcciones  
+				(<a href="https://en.bitcoin.it/wiki/List_of_address_prefixes" target="_blank">https://en.bitcoin.it/wiki/List_of_address_prefixes</a>)</p></li>
+			<li><p>/src/checkpoints.cpp:42 - Borre todos los checkpoints exepto el Genesis block.</p></li>
+			<li><p>/src/protocol.h:18,19 - Estos son los puertos que su nueva moneda usará</p></li>
+			<li><p>/src/protocol.cpp:28,21 - Cambie los valores de pchMessage para que sean únicos para su moneda (de lo contrario, intentará llevar a cuestas otras cadenas 
+				y causará problemas) .</p></li>
+			<li><p>/src/version.cpp:14 - Cambie por el nombre que quiera que tenga su billetera al momento de contruirla</p></li>
+			<li><p>/src/clientversion.h:23: - Este sera el numero de la version de su nuev moneda</p></li>
+			<li><p>/src/main.h:35-70 - Estas son especificaciones generales de monedas y la mayoría están escritas en inglés legible. Si no sabe lo que significa uno, no lo 
+				cambie. Los valores están en formato satoshi. (Todavía no he jugado mucho con esos). Puede usar el MAX_SUPPLY para la cantidad de monedas que quiera</p></li>
+			<li><p>/src/qt/res/icons - Esta es la carpeta que contiene todos los íconos de su billetera QT </p></li>
+			<li><p>/src/qt/res/images - Esta es la pantalla de presentación (carga) de su nueva moneda y billetera QT. </p></li>
 		</ul>
-		<p><strong>SETTING UP DNS SEEDS</strong><br />
-		Go the the DNS settings of the domain you wish to use and add a DNS Record as follows: <em>dnsseed.domain.com, A Record, 14400 TTL</em><br />
-		You can add multiple seeds by repeating these steps and simply changing the IP it is pointed to. Point it to the IP of your dedicated node (or checkpoint server's IP).<br />
-		The DNSseed is not required in order to run the network. It only help each node to automatically connect to the dnsseed server and receive blockchain information. You don't need it at the moment.</p>
-		<p><strong>REMOVING GENESIS BLOCK AND GENERATING NEW ONE</strong></p>
+		
+		<p><strong>ELIMINE EL BLOQUE GENESIS Y GENERE UNO NUEVO</strong></p>
 		<ul>
 			<li>Main.cpp:32710 - Change the value for the constant, pszTimestamp, to something unique, up to 91 characters.</li>
 			<li>Main.cpp:2261 - Change txNew.nTime, block.nTime value to current epoch time (<a href="https://www.unixtimestamp.com/" rel="nofollow noopener" title="This link will take you away from hive.blog">https://www.unixtimestamp.com/</a>). Do the same for testnet bellow.</li>
