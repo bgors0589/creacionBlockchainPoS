@@ -64,18 +64,18 @@
 		
 		<p><strong>ELIMINE EL BLOQUE GENESIS Y GENERE UNO NUEVO</strong></p>
 		<ul>
-			<li>Main.cpp:32710 - Change the value for the constant, pszTimestamp, to something unique, up to 91 characters.</li>
-			<li>Main.cpp:2261 - Change txNew.nTime, block.nTime value to current epoch time (<a href="https://www.unixtimestamp.com/" rel="nofollow noopener" title="This link will take you away from hive.blog">https://www.unixtimestamp.com/</a>). Do the same for testnet bellow.</li>
-			<li>Main.cpp:2262 - Make sure that block.nNonce=0, do the same for testnet.</li>
-			<li>Main.cpp:3293, 3303 - delete <a href="/trending/ifdef"> #ifdef</a> TESTING and <a href="/trending/endif"> #endif</a> to uncommend the code.</li>
-			<li>Main.cpp:3221, 3228, 3235 - delete <a href="/trending/ifdef"> #ifdef</a> TESTING and <a href="/trending/endif"> #endif</a> to uncommend the code.</li>
-			<li>Main.cpp:3222 - delete the genesis hash and leave empty <code>hashGenesisBlock = uint256("");</code></li>
-			<li>Main.h:82,83 - Delete the Genesis blocks hashes <code>hashGenesisBlockOfficial("");</code> <code>hashGenesisBlockTestNet("");</code></li>
+			<li>Main.cpp:3271 - Cambie el valor de la constante, pszTimestamp, a algo único, hasta 91 caracteres. </li>
+			<li>Main.cpp:3273, 3289 - Cambie el valor txNew.nTime, block.nTime a la época actual (<a href="https://www.unixtimestamp.com/" target"_blank">https://www.unixtimestamp.com/</a>). Haz lo mismo para tesnet.</li>
+			<li>Main.cpp:3285,3290 - Asegurese que block.nNonce=0, haga lo mismo para testnet.</li>
+			<li>Main.cpp:3293, 3303 - Borre <strong> #ifdef TESTING y #endif </strong> para descomentar el código .</li>
+			<li>Main.cpp:3221, 3228, 3235 - Borre <strong> #ifdef TESTING #else y #endif </strong> para descomentar el código.</li>
+			<li>Main.cpp:3222 - Borre el genesis Hash y dejelo vacio asi <code>hashGenesisBlock = uint256("");</code></li>
+			<li>Main.h:82,83 - Eliminar los hashes de bloques de Génesis asi <code>hashGenesisBlockOfficial("");</code> <code>hashGenesisBlockTestNet("");</code></li>
 		</ul>
-		<p>Do the backup of your coin folder. I usually just compress it. Its good to have backups not to have to follow all the steps again when something goes wrong :)</p>
-		<p><strong>COMPILE AND RUN THE DAEMON</strong></p>
-		<p>Navigate to the /src/ and run <code>make -f makefile.unix</code><br />
-		It may take some time to compile. Just have a cup of coffee.</p>
+		<p>Haz la copia de seguridad de tu carpeta de monedas. Por lo general, solo lo comprimo. Es bueno tener copias de seguridad para no tener que seguir todos los pasos nuevamente cuando algo sale mal :) </p>
+		<p><strong>COMPILE Y CORRA EL DAEMON</strong></p>
+		<p>Vaya hasta la carpeta /src/ and corra <code>make -f makefile.unix</code><br />
+		La compilación puede llevar algún tiempo. Tómate una taza de café. </p>
 		<p>We will continue to use test net from here as getting testnet running is easier due to lower difficulty for finding Genesis block. I have not managed to find the Genesis block on mainnet without having to lower the difficulty, you may try it yourself later.</p>
 		<p>You should have your daemon in the /src/ just run: <em>./YOURCOIND --daemon -testnet</em><br />
 		In the /home/.yourcoin/testnet/ run: <em>tail -f debug.log</em> you will see your computer trying to find the genesis block. It may take a bit of time before the result pops up together with  assertion error in the main window.</p>
