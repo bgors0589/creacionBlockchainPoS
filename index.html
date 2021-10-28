@@ -72,20 +72,25 @@
 			<li>Main.cpp:3222 - Borre el genesis Hash y dejelo vacio asi <code>hashGenesisBlock = uint256("");</code></li>
 			<li>Main.h:82,83 - Eliminar los hashes de bloques de Génesis asi <code>hashGenesisBlockOfficial("");</code> <code>hashGenesisBlockTestNet("");</code></li>
 		</ul>
-		<p>Haz la copia de seguridad de tu carpeta de monedas. Por lo general, solo lo comprimo. Es bueno tener copias de seguridad para no tener que seguir todos los pasos nuevamente cuando algo sale mal :) </p>
+		<p>Haz la copia de seguridad de tu carpeta de monedas. Por lo general, solo lo comprimo. Es bueno tener copias de seguridad para no tener que seguir 
+			todos los pasos nuevamente cuando algo sale mal :) </p>
 		<p><strong>COMPILE Y CORRA EL DAEMON</strong></p>
 		<p>Vaya hasta la carpeta /src/ and corra <code>make -f makefile.unix</code><br />
 		La compilación puede llevar algún tiempo. Tómate una taza de café. </p>
-		<p>We will continue to use test net from here as getting testnet running is easier due to lower difficulty for finding Genesis block. I have not managed to find the Genesis block on mainnet without having to lower the difficulty, you may try it yourself later.</p>
-		<p>You should have your daemon in the /src/ just run: <em>./YOURCOIND --daemon -testnet</em><br />
-		In the /home/.yourcoin/testnet/ run: <em>tail -f debug.log</em> you will see your computer trying to find the genesis block. It may take a bit of time before the result pops up together with  assertion error in the main window.</p>
-		<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/31td2drhr3.png" alt="31td2drhr3.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/31td2drhr3.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/31td2drhr3.png 2x" /></p>
-		<p>Here I took a bit of leap of faith and suspected that the bock was found, but the information was not printed in the decoded format. Usually the merkle root is at the end of the block information so I just took the last part and put it into Main.cpp:3310 - <code>hashMerkleRoot == uint256("<strong>0x</strong>bbe8d7dc26b86158c2cd5bff003550d5a05e3b67024f42bb5faadad711b342f9"));</code>(Don't forget 0x)</p>
-		<p>(If anyone can explain me exactly what has happened here please do so I can make sure the guide is correct.)</p>
-		<p>Save and recompile the core using /src/ <em>make -f makefile.unix</em><br />
-		Delete the /home/.yourcoin/ folder</p>
-		<p>After it finish compiling repead the steps we did on our first run:<br />
-		You should have your daemon in the /src/ just run: <em>./yourcoind --daemon -testnet</em><br />
+		<p>Continuaremos usando la red de prueba desde aquí, ya que hacer que la red de prueba se ejecute es más fácil debido a la menor dificultad para encontrar el 
+		bloque Génesis. No he logrado encontrar el bloque Génesis en la red principal sin tener que reducir la dificultad, puede intentarlo usted mismo más tarde. </p>
+		<p>Debería tener su daemon en la carpeta /src/ simplemente ejecute:  <em>./YOURCOIND --daemon -testnet</em><br />
+		En la carpeta /home/.yourcoin/testnet/ ejecute: <em>tail -f debug.log</em> verá su computadora tratando de encontrar el bloque de génesis. Puede que tarde un 
+		poco en aparecer el resultado junto con el error de afirmación en la ventana principal. </p>
+		<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/31td2drhr3.png" alt="31td2drhr3.png" /></p>
+		<p>Aquí hice un pequeño acto de fe y sospeché que se había encontrado el bloque, pero la información no estaba impresa en el formato decodificado. Por lo general, el
+		merkleRoot está al final de la información del bloque, así que tomé la última parte y la puse en Main.cpp: 3310  - <code>hashMerkleRoot == 
+		uint256("<strong>0x</strong>bbe8d7dc26b86158c2cd5bff003550d5a05e3b67024f42bb5faadad711b342f9"));</code>(Don't forget 0x)</p>
+		<p>(Si alguien puede explicar exactamente lo que ha sucedido aquí, hágalo para que que la guía sea más correcta. )</p>
+		<p>Guarde y recompile el núcleo de nuevo en la carpeta /src/ ejecute <em>make -f makefile.unix</em><br />
+		Borre la carpeta /home/.yourcoin/</p>
+		<p>Después de que termine de compilar, repita los pasos que hicimos en nuestra primera ejecución: <br />
+		Debería tener el daemon en la carpeta /src/ simplemente ejecute: <em>./yourcoind --daemon -testnet</em><br />
 		In the /home/.yourcoin/testnet run: <em>tail -f debug.log</em> you will see your computer trying to find the genesis block. It may take a bit of time before the result pops up together with error in the assertion error in the main window. This time the debug log will show full information about the block found.</p>
 		<p><img src="https://images.hive.blog/768x0/https://img.esteem.ws/zkbut8lcsz.png" alt="zkbut8lcsz.png" srcset="https://images.hive.blog/768x0/https://img.esteem.ws/zkbut8lcsz.png 1x, https://images.hive.blog/1536x0/https://img.esteem.ws/zkbut8lcsz.png 2x" /></p>
 		<ul>
