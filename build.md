@@ -1,11 +1,12 @@
 Intentar hacer de esta manera:
 
-git clone https://github.com/ <nombre de usuario> / <repo.git>
-cd <repo>
-./autogen.sh
-./configurar   ---> agregar la sugerencia de bandera que apareca
-make
-make install # opcional (instalará los binarios en / usr / local / bin
+    git clone https://github.com/<username>/<repo.git>
+    cd <repo>
+    ./autogen.sh
+    ./configure
+    make
+    make install # optional (it will install the binaries to /usr/local/bin
+
 
 Sino compila, hacer make clean
 y luego qmake-qt4
