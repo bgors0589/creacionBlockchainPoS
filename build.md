@@ -1,105 +1,16 @@
-Guía para compilar Bitcoin | Dash | otras altcoins y generar ejecutables de Ubuntu y Debian o Windows
-
-Supondré que estás usando Ubuntu 14.04.5 LTS porque eso es lo que uso para compilar ejecutables. También puede utilizar otra distribución de Linux, pero esta guía está relacionada con el sistema Linux basado en Debian.
-
-Razón para escribir esta guía: La razón detrás de esta guía son aquellos a quienes les resulta difícil compilar el código fuente y generar archivos .exe de Windows, también cubre la compilación de Ubuntu y Debian para bitcoin o dash (pero el proceso también sigue el mismo para la mayoría de altcoins ). Haré todo lo posible para mantenerlo simple y humano. Smiley
-
-Nota: Los compiladores de C ++ consumen mucha memoria. Se recomienda tener al menos 1,5 GB de memoria disponible al compilar <coin> Core
-
-Antes de construir
-¡Solo podrá compilar cuando se cumplan las dependencias!
-
-Paso 1:
-Requisitos de construcción:
-
-sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
-
-Paso 2:
-instalación de los archivos de biblioteca de Boost necesarios:
-
-sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
-
-Paso 3:
-Se requiere BerkeleyDB para la billetera:
-
-sudo apt-get install software-properties-common
-sudo add-apt-repository ppa: bitcoin / bitcoin
-sudo apt-get update
-sudo apt-get install libdb4.8-dev libdb4.8 ++ - dev
-
-Paso 4
-Miniupnpc:
-
-sudo apt-get install libminiupnpc-dev
-
-Paso 5:
-Dependencias para la GUI Qt5
-
-sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
-
-sudo apt-get install libqrencode-dev
-
-Paso 6
-Compilación cruzada
-
-sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils curl
-
-    Requisitos de compra para Windows de 64 bits:
-
-    sudo apt-get install g ++ - mingw-w64-x86-64 mingw-w64-x86-64-dev
-
-    Requisitos de compilación para ventanas de 32 bits:
-
-    sudo apt-get install g ++ - mingw-w64-i686 mingw-w64-i686-dev
-
-
-Ahora que ha instalado todos los requisitos de la forma en que se mencionó en los pasos anteriores, su compilador está listo para compilar el ejecutable para Ubuntu y Debian o Windows x86_32bit y x86_64bit. Smiley
-
-Para construir:
-Nota: clone el repositorio de monedas por separado para cada compilación
-
-
-Para Ubuntu y Debian:
+Intentar hacer de esta manera:
 
 git clone https://github.com/ <nombre de usuario> / <repo.git>
 cd <repo>
-    ./autogen.sh
-./configurar
-hacer
+./autogen.sh
+./configurar   ---> agregar la sugerencia de bandera que apareca
+make
 make install # opcional (instalará los binarios en / usr / local / bin
 
-Para Windows x86_32bit:
-
-git clone https://github.com/ <nombre de usuario> / <repo.git>
-cd <repo> / depende
-hacer HOST = i686-w64-mingw32
-    cd ..
-    ./autogen.sh
-CONFIG_SITE = $ PWD / depende / i686-w64-mingw32 / share / config.site ./configure -with-gui --disable-zmq --prefix = /
-hacer
-
-Para Windows x86_64bit:
-
-git clone https://github.com/ <nombre de usuario> / <repo.git>
-cd <repo> / depende
-hacer HOST = x86_64-w64-mingw32
-    cd ..
-    ./autogen.sh
-CONFIG_SITE = $ PWD / depende / x86_64-w64-mingw32 / share / config.site ./configure -with-gui --disable-zmq --prefix = /
-hacer
-
-
-Si todos los pasos anteriores fueron como se esperaba, ahora tendrá los ejecutables listos para su sistema operativo deseado.
-Espero que esta guía te haya ayudado a aprender algunas cosas nuevas.
-
-No dude en hacer preguntas si no comprende un paso, lo apoyaré si es necesario 
-  
-  
-  
-  
-  
-  
-  
+Sino compila, hacer make clean
+y luego qmake-qt4
+y luego make de nuevo
+    
 # ---> este es el  ORIGINAL
   
   
@@ -198,3 +109,169 @@ If all the steps above went as expected!, you now will have the executables read
 I hope this guide has helped you to learn some new things.
 
 Feel free to ask questions if you don't understand a step, i will support you if needed 
+    
+    
+    
+    
+# >> compilar billetera para windows
+    
+ Use the following instructions to cross-compile a wallet for Windows using Ubuntu Server 18.04.
+
+Update your Ubuntu machine.
+
+sudo apt-get update
+sudo apt-get upgrade
+
+Install the required dependencies for MXE.
+
+sudo apt-get install p7zip-full autoconf automake autopoint bash bison bzip2 cmake flex gettext git g++ gperf libgtk2.0-dev intltool libffi-dev libtool libtool-bin libltdl-dev libssl-dev libxml-parser-perl make openssl patch perl pkg-config python ruby scons sed unzip wget xz-utils lzip python-pip g++-multilib libc6-dev-i386
+
+Clone the MXE repository
+
+cd /mnt
+sudo git clone https://github.com/mxe/mxe.git
+
+Compile Boost
+
+cd /mnt/mxe
+sudo make MXE_TARGETS="i686-w64-mingw32.static" boost
+
+Compile QT5
+
+cd /mnt/mxe
+sudo make MXE_TARGETS="i686-w64-mingw32.static" qttools
+
+Download and unpack Berkeley DB.
+
+cd /mnt
+sudo wget https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz
+sudo tar zxvf db-4.8.30.tar.gz
+
+Create bash script to install Berkeley DB.
+
+cd /mnt/db-4.8.30
+sudo touch compile-db.sh
+sudo chmod ugo+x compile-db.sh
+
+Edit the file compile-db.sh.
+
+sudo nano compile-db.sh
+
+Paste the following in the file compile-db.sh
+
+#!/bin/bash
+MXE_PATH=/mnt/mxe
+sed -i "s/WinIoCtl.h/winioctl.h/g" src/dbinc/win_db.h
+mkdir build_mxe
+cd build_mxe
+
+CC=$MXE_PATH/usr/bin/i686-w64-mingw32.static-gcc \
+CXX=$MXE_PATH/usr/bin/i686-w64-mingw32.static-g++ \
+../dist/configure \
+--disable-replication \
+--enable-mingw \
+--enable-cxx \
+--host x86 \
+--prefix=$MXE_PATH/usr/i686-w64-mingw32.static
+
+make
+make install
+
+Compile Berkeley DB.
+
+sudo ./compile-db.sh
+
+Download and unpack miniupnp.
+
+cd /mnt
+sudo wget http://miniupnp.free.fr/files/miniupnpc-1.9.tar.gz
+sudo tar zxvf miniupnpc-1.9.tar.gz
+
+Create bash script to install miniupnp.
+
+cd /mnt/miniupnpc-1.9
+sudo touch compile-upnp.sh
+sudo chmod ugo+x compile-upnp.sh
+
+Edit the file compile-upnp.sh.
+
+sudo nano compile-upnp.sh
+
+Paste the following in the file compile-upnp.sh
+
+#!/bin/bash
+MXE_PATH=/mnt/mxe
+CC=$MXE_PATH/usr/bin/i686-w64-mingw32.static-gcc \
+AR=$MXE_PATH/usr/bin/i686-w64-mingw32.static-ar \
+CFLAGS="-DSTATICLIB -I$MXE_PATH/usr/i686-w64-mingw32.static/include" \
+LDFLAGS="-L$MXE_PATH/usr/i686-w64-mingw32.static/lib" \
+make libminiupnpc.a
+mkdir $MXE_PATH/usr/i686-w64-mingw32.static/include/miniupnpc
+cp *.h $MXE_PATH/usr/i686-w64-mingw32.static/include/miniupnpc
+cp libminiupnpc.a $MXE_PATH/usr/i686-w64-mingw32.static/lib
+
+Compile miniupnp.
+
+sudo ./compile-upnp.sh
+
+Install OpenSSL.
+
+cd /mnt/mxe
+sudo make openssl1.0 MXE_PLUGIN_DIRS=plugins/examples/openssl1.0/
+
+Create a directory for the source code.
+
+cd ~/
+mkdir source_code
+cd source_code
+
+Note: replace “examplecoin” with the name of your coin.
+Note: replace “6gs39011kick8xmqutpkrvi92xx5kwev4ykanlv1ls0ouuae5x” with the coinID of your coin.
+
+Download the source code from MyCoin. (Available for a paid coin)
+
+wget "https://dl.walletbuilders.com/download?customer=6gs39011kick8xmqutpkrvi92xx5kwev4ykanlv1ls0ouuae5x&filename=examplecoin-source.tar.gz" -O examplecoin-source.tar.gz
+
+Extract the tar file.
+
+tar -xzvf examplecoin-source.tar.gz
+
+Create bash script to compile your windows wallet.
+
+touch compile-blockchain.sh
+chmod ugo+x compile-blockchain.sh
+
+Edit the file compile-blockchain.sh.
+
+sudo nano compile-blockchain.sh
+
+Paste the following in the file compile-blockchain.sh.
+
+#!/bin/bash
+export PATH=/mnt/mxe/usr/bin:$PATH
+MXE_INCLUDE_PATH=/mnt/mxe/usr/i686-w64-mingw32.static/include
+MXE_LIB_PATH=/mnt/mxe/usr/i686-w64-mingw32.static/lib
+
+i686-w64-mingw32.static-qmake-qt5 \
+RELEASE=1 \
+BOOST_LIB_SUFFIX=-mt \
+BOOST_THREAD_LIB_SUFFIX=_win32-mt \
+BOOST_INCLUDE_PATH=$MXE_INCLUDE_PATH/boost \
+BOOST_LIB_PATH=$MXE_LIB_PATH \
+OPENSSL_INCLUDE_PATH=$MXE_INCLUDE_PATH/openssl \
+OPENSSL_LIB_PATH=$MXE_LIB_PATH \
+BDB_INCLUDE_PATH=$MXE_INCLUDE_PATH \
+BDB_LIB_PATH=$MXE_LIB_PATH \
+MINIUPNPC_INCLUDE_PATH=$MXE_INCLUDE_PATH \
+MINIUPNPC_LIB_PATH=$MXE_LIB_PATH \
+QMAKE_LRELEASE=/mnt/mxe/usr/i686-w64-mingw32.static/qt5/bin/lrelease Examplecoin-qt.pro
+
+make -f Makefile.Release
+
+Compile your Windows wallet.
+
+./compile-blockchain.sh
+
+The compiling will take about 60 minutes depending on your system hardware.
+
+Your compiled wallet named examplecoin-qt.exe can be found in the folder “release” when compiling is finished.
