@@ -3,7 +3,7 @@ Intentar hacer de esta manera:
     git clone https://github.com/<username>/<repo.git>
     cd <repo>
     ./autogen.sh
-    ./configure
+    ./configure (colocar la bandera que le sugiera)
     make
     make install # optional (it will install the binaries to /usr/local/bin
 
